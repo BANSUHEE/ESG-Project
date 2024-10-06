@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form action="/login" method="POST">
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required>
+    <br>
+    <button type="submit">Login</button>
+  </form>
+  <p id="error-message">
+    <!-- 오류 메시지 표시 (자바스크립트로 처리 가능) -->
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('error')) {
+        document.getElementById('error-message').textContent = 'Invalid credentials. Please try again.';
+      }
+    </script>
+  </p>
+</body>
+</html>
