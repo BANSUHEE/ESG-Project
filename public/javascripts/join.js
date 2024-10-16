@@ -1,62 +1,49 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const joinForm = document.getElementById("joinForm");
+$(document).ready(function () {
+    const joinForm = $("#joinForm");
 
-    if (joinForm) {
-        joinForm.addEventListener("submit", function (e) {
-            e.preventDefault(); // Prevent the form's default submission behavior
+    if (joinForm.length) {
+        joinForm.on("submit", function (e) {
+            e.preventDefault(); // 폼의 기본 제출 동작을 방지
 
-            // Capture input data
-            const name = document.getElementById("name").value;
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-            const business_type =
-                document.getElementById("business_type").value;
-            const registration_number = document.getElementById(
-                "registration_number"
-            ).value;
+            // 입력 데이터 캡처
+            const name = $("#name").val();
+            const username = $("#username").val();
+            const password = $("#password").val();
+            const business_type = $("#business_type").val();
+            const registration_number = $("#registration_number").val();
 
-            // Send data to the server
-            fetch("/users/join", {
+            // 서버로 데이터 전송
+            $.ajax({
+                url: "/users/join",
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
+                contentType: "application/json",
+                data: JSON.stringify({
                     name: name,
                     username: username,
                     password: password,
                     business_type: business_type,
                     registration_number: registration_number,
                 }),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return response.json().then((err) => {
-                            throw new Error(
-                                err.message || "Network response was not ok"
-                            );
-                        });
-                    }
-                    return response.json();
-                })
-                .then((data) => {
+                success: function (data) {
                     if (data.success) {
-                        document.getElementById("joinResult").innerText =
-                            "Signup successful!";
+                        $("#joinResult").text("Signup successful!");
                         console.log("회원가입 성공");
                     } else {
-                        document.getElementById("joinResult").innerText =
+                        $("#joinResult").text(
                             "Signup failed: " +
-                            (data.message || "Unknown error");
+                                (data.message || "Unknown error")
+                        );
                         console.log("회원가입 실패");
                     }
-                })
-                .catch((error) => {
-                    console.error("회원가입 요청 중 오류 발생:", error.message);
-                    document.getElementById(
-                        "joinResult"
-                    ).innerText = `Error: ${error.message}`;
-                });
+                },
+                error: function (xhr) {
+                    const errorMessage =
+                        xhr.responseJSON?.message ||
+                        "Network response was not ok";
+                    console.error("회원가입 요청 중 오류 발생:", errorMessage);
+                    $("#joinResult").text(`Error: ${errorMessage}`);
+                },
+            });
         });
     } else {
         console.error("ID가 'joinForm'인 요소를 찾을 수 없습니다.");
