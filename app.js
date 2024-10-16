@@ -9,6 +9,23 @@ var usersRouter = require("./routes/users");
 
 var app = express();
 
+//session
+const session = require("express-session");
+
+app.use(
+    session({
+        secret: "your-secret-key", // 강력한 비밀 키를 사용하세요
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false }, // HTTPS 사용 시 true로 설정
+    })
+);
+
+app.use((req, res, next) => {
+    res.locals.username = req.session.username || null; // 모든 뷰에서 username 접근 가능
+    next();
+});
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");

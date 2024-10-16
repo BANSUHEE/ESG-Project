@@ -48,6 +48,7 @@ router.post("/login", function (req, res, next) {
         }
 
         if (results.length > 0) {
+            req.session.username = username;
             res.json({ success: true });
             console.log("로그인 성공");
         } else {
@@ -67,6 +68,7 @@ router.get("/join", function (req, res, next) {
         pageName: "users/join.ejs",
     });
 });
+
 router.post("/join", (req, res) => {
     const { name, username, password, business_type, registration_number } =
         req.body;
@@ -93,6 +95,16 @@ router.post("/join", (req, res) => {
     );
 });
 
+//---------------------[로그아웃]------------------------//
+router.get("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("세션 삭제 중 오류 발생:", err);
+            return res.status(500).send("로그아웃 중 오류가 발생했습니다.");
+        }
+        res.redirect("/users/login");
+    });
+});
 //---------------------[온실가스 계산기]------------------------//
 
 module.exports = router;

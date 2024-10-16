@@ -1,52 +1,41 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const loginForm = document.getElementById("loginForm");
+$(document).ready(function () {
+    const loginForm = $("#loginForm");
 
-    if (loginForm) {
-        loginForm.addEventListener("submit", function (e) {
+    if (loginForm.length) {
+        loginForm.on("submit", function (e) {
             e.preventDefault(); // 폼의 기본 제출 동작을 방지
 
             // 사용자 입력 정보
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+            const username = $("#username").val();
+            const password = $("#password").val();
 
             // 로그인 요청을 서버로 전송
-            fetch("/users/login", {
+            $.ajax({
+                url: "/users/login",
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
+                contentType: "application/json",
+                data: JSON.stringify({
                     username: username,
                     password: password,
                 }),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return response.json().then((err) => {
-                            throw new Error(
-                                err.message || "Network response was not ok"
-                            );
-                        });
-                    }
-                    return response.json();
-                })
-                .then((data) => {
+                success: function (data) {
                     if (data.success) {
-                        document.getElementById("loginResult").innerText =
-                            "Login successful!";
+                        $("#loginResult").text("Login successful!");
                         console.log("로그인 성공");
+                        window.location.href = "/"; // 성공 시 홈 페이지로 리다이렉트
                     } else {
-                        document.getElementById("loginResult").innerText =
-                            "Invalid credentials.";
+                        $("#loginResult").text("Invalid credentials.");
                         console.log("로그인 실패: 잘못된 자격 증명");
                     }
-                })
-                .catch((error) => {
-                    console.error("로그인 요청 중 오류 발생:", error.message);
-                    document.getElementById(
-                        "loginResult"
-                    ).innerText = `Error: ${error.message}`;
-                });
+                },
+                error: function (xhr) {
+                    const errorMessage =
+                        xhr.responseJSON?.message ||
+                        "Network response was not ok";
+                    console.error("로그인 요청 중 오류 발생:", errorMessage);
+                    $("#loginResult").text(`Error: ${errorMessage}`);
+                },
+            });
         });
     } else {
         console.error("ID가 'loginForm'인 요소를 찾을 수 없습니다.");

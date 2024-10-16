@@ -1,4 +1,12 @@
+<a href="/" class="me-3">홈</a>
+
+<% if (username) { %>
+<a href="/users/logout" class="me-3">로그아웃</a>
+<a href="/calculator" class="me-3">온실가스 계산기</a>
+<span><%= username %>님 환영합니다!</span>
+<% } else { %>
 <a href="/users/login" class="me-3">로그인</a>
 <a href="/users/join" class="me-3">회원가입</a>
-<a href="/calculator" class="me-3">온실가스 계산기</a>
+<span>로그인 하세요</span>
+<% } %>
 <hr />
