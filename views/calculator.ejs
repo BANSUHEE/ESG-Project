@@ -1,0 +1,244 @@
+<h2>CO2 Calculator</h2>
+<!-- 년도 선택 -->
+<div>
+    <label for="yearSelect">년도:</label>
+    <select id="yearSelect">
+        <option value="">2024</option>
+        <% for (let year = 2020; year <= 2030; year++) { %>
+        <option value="<%= year %>"><%= year %></option>
+        <% } %>
+    </select>
+
+    <!-- 월 선택 -->
+    <label for="monthSelect">월:</label>
+    <select id="monthSelect">
+        <option value="">10</option>
+        <% for (let mognth = 1; month <= 12; month++) { %>
+        <option value="<%= month %>"><%= month %>월</option>
+        <% } %>
+    </select>
+</div>
+<br />
+
+<div class="calculator">
+    <!-- 전기 섹션 -->
+    <div class="section bg-light p-3 mb-4 rounded">
+        <h2>전기</h2>
+        <label for="electricity-usage">전기 사용량 (kwh/월)</label>
+        <div class="input-group">
+            <input
+                type="number"
+                id="electricity-usage"
+                class="form-control"
+                placeholder="숫자 입력..."
+            />
+        </div>
+        <p>CO₂ 발생량: <span id="electricity-co2">0.00</span> kg/월</p>
+    </div>
+
+    <!-- 가스 섹션 -->
+    <div class="section bg-light p-3 mb-4 rounded">
+        <h2>가스</h2>
+        <label for="gas-usage">가스 사용량 (m³/월)</label>
+        <div class="input-group">
+            <input
+                type="number"
+                id="gas-usage"
+                class="form-control"
+                placeholder="숫자 입력..."
+            />
+        </div>
+        <p>CO₂ 발생량: <span id="gas-co2">0.00</span> kg/월</p>
+    </div>
+
+    <!-- 수도 섹션 -->
+    <div class="section bg-light p-3 mb-4 rounded">
+        <h2>수도</h2>
+        <label for="water-usage">수도 사용량 (m³/월)</label>
+        <div class="input-group">
+            <input
+                type="number"
+                id="water-usage"
+                class="form-control"
+                placeholder="숫자 입력..."
+            />
+        </div>
+        <p>CO₂ 발생량: <span id="water-co2">0.00</span> kg/월</p>
+    </div>
+
+    <!-- 교통 섹션 -->
+    <div class="section bg-light p-3 mb-4 rounded">
+        <h2>교통</h2>
+        <label>승용차 종류</label>
+        <div class="form-check form-check-inline">
+            <input
+                type="radio"
+                name="carType"
+                value="휘발유"
+                id="petrol"
+                class="form-check-input"
+                checked
+            />
+            <label class="form-check-label" for="petrol">휘발유</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input
+                type="radio"
+                name="carType"
+                value="경유"
+                id="diesel"
+                class="form-check-input"
+            />
+            <label class="form-check-label" for="diesel">경유</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input
+                type="radio"
+                name="carType"
+                value="LPG"
+                id="lpg"
+                class="form-check-input"
+            />
+            <label class="form-check-label" for="lpg">LPG</label>
+        </div>
+        <label for="distance">이동거리 (km/월)</label>
+        <div class="input-group">
+            <input
+                type="number"
+                id="distance"
+                class="form-control"
+                placeholder="숫자 입력..."
+            />
+        </div>
+        <p>CO₂ 발생량: <span id="transport-co2">0.00</span> kg/월</p>
+    </div>
+
+    <!-- 폐기물 섹션 -->
+    <div class="section bg-light p-3 mb-4 rounded">
+        <h2>폐기물</h2>
+        <label for="waste-type">폐기물 종류</label>
+        <select id="waste-type" class="form-select mb-3">
+            <option value="생활 폐기물">생활 폐기물</option>
+            <option value="산업 폐기물">산업 폐기물</option>
+        </select>
+        <label for="waste-amount">폐기물 사용량 (L/월)</label>
+        <div class="input-group">
+            <input
+                type="number"
+                id="waste-amount"
+                class="form-control"
+                placeholder="숫자 입력..."
+            />
+        </div>
+        <p>CO₂ 발생량: <span id="waste-co2">0.00</span> kg/월</p>
+    </div>
+
+    <!-- CO₂ 총량 카드 -->
+    <div class="card">
+        <h3>총 CO₂ 양</h3>
+        <p id="totalCo2">0 kg</p>
+    </div>
+
+    <!-- CO₂ 양 입력 -->
+    <label for="co2Input">CO₂ 양 입력 (kg):</label>
+    <input type="number" id="co2Input" placeholder="0" />
+
+    <!-- 저장 버튼 -->
+    <button class="button" id="saveButton">저장하기</button>
+</div>
+
+<!-- JavaScript 코드 -->
+<script>
+    // 전기 사용량 CO₂ 계산
+    document
+        .getElementById("electricity-usage")
+        .addEventListener("input", function () {
+            const usage = this.value;
+            const co2Emission = usage * 0.4781;
+            document.getElementById("electricity-co2").innerText =
+                co2Emission.toFixed(2);
+        });
+
+    // 가스 사용량 CO₂ 계산
+    document.getElementById("gas-usage").addEventListener("input", function () {
+        const usage = this.value;
+        const co2Emission = usage * 2.176;
+        document.getElementById("gas-co2").innerText = co2Emission.toFixed(2);
+    });
+
+    // 수도 사용량 CO₂ 계산
+    document
+        .getElementById("water-usage")
+        .addEventListener("input", function () {
+            const usage = this.value;
+            const co2Emission = usage * 0.237;
+            document.getElementById("water-co2").innerText =
+                co2Emission.toFixed(2);
+        });
+
+    // 교통 CO₂ 계산
+    document
+        .getElementById("distance")
+        .addEventListener("input", calculateTransportCO2);
+    document.querySelectorAll('input[name="carType"]').forEach((radio) => {
+        radio.addEventListener("change", calculateTransportCO2);
+    });
+
+    function calculateTransportCO2() {
+        const distance = document.getElementById("distance").value;
+        const carType = document.querySelector(
+            'input[name="carType"]:checked'
+        ).value;
+        let emissionFactor =
+            carType === "휘발유" ? 2.097 : carType === "경유" ? 2.582 : 1.868;
+        const co2Emission = distance * emissionFactor;
+        document.getElementById("transport-co2").innerText =
+            co2Emission.toFixed(2);
+    }
+
+    // 폐기물 CO₂ 계산
+    document
+        .getElementById("waste-amount")
+        .addEventListener("input", function () {
+            const usage = this.value;
+            const co2Emission = usage * 0.125;
+            document.getElementById("waste-co2").innerText =
+                co2Emission.toFixed(2);
+        });
+
+    //총량
+    $(document).ready(function () {
+        // 실시간으로 CO₂ 총량 계산
+        $("#co2Input").on("input", function () {
+            const co2Value = parseFloat($(this).val()) || 0;
+            $("#totalCo2").text(co2Value + " kg");
+        });
+
+        // 저장하기 버튼 클릭 이벤트
+        $("#saveButton").on("click", function () {
+            const year = $("#yearSelect").val();
+            const month = $("#monthSelect").val();
+            const totalCo2 = $("#co2Input").val();
+
+            if (!year || !month) {
+                alert("년과 월을 선택하세요.");
+                return;
+            }
+
+            if (totalCo2 === "" || totalCo2 <= 0) {
+                alert("CO₂ 양을 입력하세요.");
+                return;
+            }
+
+            alert(
+                "저장되었습니다: " +
+                    year +
+                    "년 " +
+                    month +
+                    "월, CO₂ 총량: " +
+                    totalCo2 +
+                    " kg"
+            );
+        });
+    });
+</script>
