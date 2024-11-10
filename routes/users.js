@@ -1,28 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const mysql = require("mysql");
-
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-    res.send("respond with a resource");
-});
-
-// MySQL 연결 설정
-const connection = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "root",
-    database: "companydb",
-});
-
-connection.connect((err) => {
-    if (err) {
-        console.error("MySQL 연결 오류:", err);
-        return;
-    }
-    console.log("MySQL에 연결되었습니다.");
-});
-
+const connection = require("./database");
 //---------------------[로그인]------------------------//
 // GET 요청 시 로그인 페이지 렌더링
 router.get("/login", function (req, res, next) {
@@ -105,44 +83,5 @@ router.get("/logout", (req, res) => {
         res.redirect("/users/login");
     });
 });
-//---------------------[온실가스 계산기]------------------------//
-router.post("/calculator", (req, res) => {
-    const {
-        username,
-        year,
-        month,
-        electricity_co2,
-        gas_co2,
-        water_co2,
-        transport_co2,
-        waste_co2,
-        total_co2,
-    } = req.body;
 
-    const sql = `
-        INSERT INTO emissions (username, year, month, electricity_co2, gas_co2, water_co2, transport_co2, waste_co2, total_co2)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    const values = [
-        username,
-        year,
-        month,
-        electricity_co2,
-        gas_co2,
-        water_co2,
-        transport_co2,
-        waste_co2,
-        total_co2,
-    ];
-
-    connection.query(sql, values, (err, result) => {
-        if (err) {
-            console.error("데이터 삽입 오류:", err);
-            res.status(500).send("데이터 저장 중 오류가 발생했습니다.");
-        } else {
-            res.send("데이터가 성공적으로 저장되었습니다.");
-        }
-    });
-});
 module.exports = router;

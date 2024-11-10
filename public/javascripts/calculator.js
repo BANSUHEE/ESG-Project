@@ -83,32 +83,33 @@ $("#saveButton").on("click", function () {
     const wasteCO2 = parseFloat($("#waste-co2").text()) || 0;
     const totalCO2 = parseFloat($("#totalCo2").text()) || 0;
 
-    console.log({
-        username: username,
-        year: year,
-        month: month,
-        electricity_co2: electricityCO2,
-        gas_co2: gasCO2,
-        water_co2: waterCO2,
-        transport_co2: transportCO2,
-        waste_co2: wasteCO2,
-        total_co2: totalCO2,
-    });
+    alert(year + "년" + month + "월");
+    // console.log({
+    //     username: username,
+    //     year: year,
+    //     month: month,
+    //     electricity_co2: electricityCO2,
+    //     gas_co2: gasCO2,
+    //     water_co2: waterCO2,
+    //     transport_co2: transportCO2,
+    //     waste_co2: wasteCO2,
+    //     total_co2: totalCO2,
+    // });
 
-    console.log({
-        username: username,
-        year: year,
-        month: month,
-        electricity_co2: electricityCO2,
-        gas_co2: gasCO2,
-        water_co2: waterCO2,
-        transport_co2: transportCO2,
-        waste_co2: wasteCO2,
-        total_co2: totalCO2,
-    });
+    // 년, 월 선택 여부와 CO2 총량 입력 여부 확인
+    if (!year || !month) {
+        alert("년과 월을 선택하세요.");
+        return;
+    }
 
+    if (totalCO2 <= 0) {
+        alert("CO₂ 양을 입력하세요.");
+        return;
+    }
+
+    // AJAX 요청으로 데이터 전송
     $.ajax({
-        url: "/users/calculator",
+        url: "/stats/calculator", // Node.js 백엔드에서 처리할 경로
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify({
@@ -127,7 +128,7 @@ $("#saveButton").on("click", function () {
         },
         error: function (xhr, status, error) {
             alert("데이터 저장 중 오류가 발생했습니다.");
-            console.error("에러 메시지:", error);
+            console.error(error);
         },
     });
 });

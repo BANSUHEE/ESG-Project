@@ -4,12 +4,12 @@
     <label for="yearSelect">년도:</label>
     <select id="yearSelect">
         <% for (let year = 2020; year <= 2030; year++) { %>
-        <option value="<%= year %>"><%= year %></option>
+        <option value="<%= year %>"><%= year %>년</option>
         <% } %>
     </select>
 
     <!-- 월 선택 -->
-    <label for="monthSelect">월:</label>
+    <label for="monthSelect"></label>
     <select id="monthSelect">
         <% for (let month = 1; month <= 12; month++) { %>
         <option value="<%= month %>"><%= month %>월</option>
