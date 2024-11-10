@@ -21,11 +21,12 @@ $(document).ready(function () {
                 success: function (data) {
                     if (data.success) {
                         $("#loginResult").text("Login successful!");
-                        console.log("로그인 성공");
+                        alert("로그인 성공");
+                        sessionStorage.setItem("username", username);
                         window.location.href = "/"; // 성공 시 홈 페이지로 리다이렉트
                     } else {
                         $("#loginResult").text("Invalid credentials.");
-                        console.log("로그인 실패: 잘못된 자격 증명");
+                        alert("로그인 실패: 잘못된 자격 증명");
                     }
                 },
                 error: function (xhr) {

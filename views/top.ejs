@@ -1,13 +1,37 @@
-<a href="/" class="me-3">홈</a>
+<div class="mt-5">
+    <a href="/" class="me-3">홈</a>
+    <a href="/calculator" id="calculator" class="me-3">온실가스 계산기</a>
+    <a href="/chart" class="me-3">차트</a>
 
-<% if (username) { %>
-<a href="/users/logout" class="me-3">로그아웃</a>
-<a href="/calculator" class="me-3">온실가스 계산기</a>
-<span class="me-3"><%= username %>님 환영합니다!</span>
-<% } else { %>
-<a href="/users/login" class="me-3">로그인</a>
-<a href="/users/join" class="me-3">회원가입</a>
-<span class="me-3">로그인 하세요</span>
-<% } %>
-<a href="/chart" class="me-3">차트</a>
-<hr />
+    <!-- 로그인 및 사용자 정보 -->
+    <a id="login" href="/users/login" class="me-3">로그인</a>
+    <a id="join" href="/users/join" class="me-3">회원가입</a>
+    <a id="logout" href="#" class="me-3">로그아웃</a>
+    <span id="welcome" class="me-3"></span>
+
+    <hr />
+</div>
+
+<script>
+    // sessionStorage에서 username 가져오기
+    const username = sessionStorage.getItem("username");
+
+    if (username) {
+        // 로그인 상태
+        $("#login, #join").hide(); // 로그인/회원가입 링크 숨기기
+        $("#logout, #calculator").show(); // 로그아웃 및 계산기 링크 표시
+        $("#welcome").text(username + "님 환영합니다!"); // 환영 메시지 표시
+    } else {
+        // 로그아웃 상태
+        $("#login, #join").show(); // 로그인/회원가입 링크 표시
+        $("#logout, #calculator, #welcome").hide(); // 로그아웃, 계산기 링크 숨기기
+    }
+
+    // 로그아웃 버튼 클릭 이벤트
+    $("#logout").on("click", function (e) {
+        e.preventDefault();
+        if (!confirm("정말로 로그아웃하시겠습니까?")) return;
+        sessionStorage.clear();
+        location.href = "/";
+    });
+</script>

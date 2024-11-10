@@ -106,5 +106,43 @@ router.get("/logout", (req, res) => {
     });
 });
 //---------------------[온실가스 계산기]------------------------//
+router.post("/calculator", (req, res) => {
+    const {
+        username,
+        year,
+        month,
+        electricity_co2,
+        gas_co2,
+        water_co2,
+        transport_co2,
+        waste_co2,
+        total_co2,
+    } = req.body;
 
+    const sql = `
+        INSERT INTO emissions (username, year, month, electricity_co2, gas_co2, water_co2, transport_co2, waste_co2, total_co2)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
+        username,
+        year,
+        month,
+        electricity_co2,
+        gas_co2,
+        water_co2,
+        transport_co2,
+        waste_co2,
+        total_co2,
+    ];
+
+    connection.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("데이터 삽입 오류:", err);
+            res.status(500).send("데이터 저장 중 오류가 발생했습니다.");
+        } else {
+            res.send("데이터가 성공적으로 저장되었습니다.");
+        }
+    });
+});
 module.exports = router;
