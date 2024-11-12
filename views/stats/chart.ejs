@@ -1,46 +1,48 @@
-<h1><%= title %></h1>
-
-<!-- 차트를 표시할 캔버스 요소 -->
-<canvas id="myChart" style="width: 300px; height: 150px"></canvas>
+<h2>최근 6개월 CO₂ 배출량</h2>
+<canvas id="co2Chart"></canvas>
 
 <script>
-        // 서버에서 전달된 데이터를 자바스크립트 변수에 저장
-        var data1 = <%= data1 %>;
-        var data2 = <%= data2 %>;
-        var data3 = <%= data3 %>;
+    // 서버에서 username 세션을 사용해 데이터를 가져옴
+    fetch(`/stats/chart`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data); // 데이터 확인
+            if (data.length === 0) {
+                alert("해당 사용자의 데이터가 없습니다.");
+                return;
+            }
 
-    // Chart.js를 이용해 차트를 그림
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-            type: 'bar', // bar 차트로 설정 (원하는 대로 변경 가능)
-            data: {
-        labels: ['1월', '2월', '3월', '4월', '5월'], // x축 레이블
-        datasets: [{
-            label: '# 테스트', // 범례
-            data: [data1, data2, data3, 40, 50], // y축 데이터
-            backgroundColor: [
-            'rgba(255, 99, 132, 0.2)', // 0.2가 투명도
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)'
-            ],
-            borderColor: [ // 막대 테두리
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)'
-            ],
-            borderWidth: 1 // 테두리 두께
-        }]
-        },
-        options: {
-        scales: { // 차트 축 설정하는 부분 // , 필수
-            y: {
-            beginAtZero: true, // y축이 0부터 시작
-            max: 100, // y축 최대값을 100으로 설정
-            ticks: {
-                stepSize: 20 // y축 간격을 20으로 설정
-            }
-            }
-        }
-        }
-    });
+            // 서버에서 받은 데이터를 이용해 차트를 생성
+            const labels = data.map(
+                (item) => `${item.year}-${String(item.month).padStart(2, "0")}`
+            );
+            const co2Data = data.map((item) => item.total_co2);
+
+            const ctx = document.getElementById("co2Chart").getContext("2d");
+            const co2Chart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "총 CO₂ 배출량 (kg)",
+                            data: co2Data,
+                            fill: false,
+                            borderColor: "rgb(75, 192, 192)",
+                            tension: 0.1,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        })
+        .catch((error) => {
+            console.error("데이터를 가져오는 중 오류 발생:", error);
+        });
 </script>
