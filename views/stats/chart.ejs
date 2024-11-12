@@ -1,0 +1,49 @@
+<h2>최근 6개월 CO₂ 배출량</h2>
+<canvas id="co2Chart"></canvas>
+
+<script>
+    // 서버에서 username 세션을 사용해 데이터를 가져옴
+    fetch(`/stats/chart`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data); // 데이터 확인
+            if (data.length === 0) {
+                clopopp;
+                alert("해당 사용자의 데이터가 없습니다.");
+                return;
+            }
+
+            // 서버에서 받은 데이터를 이용해 차트를 생성
+            const labels = data.map(
+                (item) => `${item.year}-${String(item.month).padStart(2, "0")}`
+            );
+            const co2Data = data.map((item) => item.total_co2);
+
+            const ctx = document.getElementById("co2Chart").getContext("2d");
+            const co2Chart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "총 CO₂ 배출량 (kg)",
+                            data: co2Data,
+                            fill: false,
+                            borderColor: "rgb(75, 192, 192)",
+                            tension: 0.1,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        })
+        .catch((error) => {
+            console.error("데이터를 가져오는 중 오류 발생:", error);
+        });
+</script>
