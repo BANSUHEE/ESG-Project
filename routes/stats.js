@@ -10,23 +10,6 @@ router.get("/calculator", function (req, res, next) {
     });
 });
 
-// router.get("/chart", function (req, res, next) {
-//     // http://localhost/chart // app.js 에 경로 있음
-//     // 서버에서 변수 설정 하고 클라이언트로 보냄
-//     var data1 = 10;
-//     var data2 = 20;
-//     var data3 = 30;
-
-//     // 데이터를 ejs로 전달
-//     res.render("index", {
-//         title: "Chart",
-//         pageName: "stats/chart.ejs",
-//         data1: data1,
-//         data2: data2,
-//         data3: data3,
-//     });
-// });
-
 router.post("/calculator", (req, res) => {
     const {
         username,
@@ -72,20 +55,61 @@ router.post("/calculator", (req, res) => {
         }
     });
 });
-router.get("/chart", (req, res) => {
+
+router.get("/record", (req, res) => {
+    res.render("index", {
+        title: "record",
+        pageName: "stats/record.ejs",
+    });
+});
+
+// 데이터를 가져오는 경로 설정
+router.get("/chart_bar", (req, res) => {
     const username = req.session.username; // 세션에서 username 가져오기
 
     if (!username) {
         return res.status(401).send("사용자가 로그인되어 있지 않습니다.");
     }
 
-    const sql = `
-        SELECT year, month, total_co2
-        FROM emissions
-        WHERE username = ?
-        ORDER BY year DESC, month DESC
-        LIMIT 6;
-    `;
+    // const sql = `
+    //     SELECT year, month, total_co2
+    //     FROM emissions
+    //     WHERE username = ?
+    //     ORDER BY year DESC, month DESC
+    //     LIMIT 6;
+    // `;
+    const sql = `SELECT
+        m.year,
+        m.month,
+        COALESCE(e.total_co2, 0) AS total_co2
+        FROM (
+            SELECT
+                YEAR(DATE_ADD(CURDATE(), INTERVAL -5 MONTH)) AS year,
+                MONTH(DATE_ADD(CURDATE(), INTERVAL -5 MONTH)) AS month
+            UNION ALL
+            SELECT
+                YEAR(DATE_ADD(CURDATE(), INTERVAL -4 MONTH)),
+                MONTH(DATE_ADD(CURDATE(), INTERVAL -4 MONTH))
+            UNION ALL
+            SELECT
+                YEAR(DATE_ADD(CURDATE(), INTERVAL -3 MONTH)),
+                MONTH(DATE_ADD(CURDATE(), INTERVAL -3 MONTH))
+            UNION ALL
+            SELECT
+                YEAR(DATE_ADD(CURDATE(), INTERVAL -2 MONTH)),
+                MONTH(DATE_ADD(CURDATE(), INTERVAL -2 MONTH))
+            UNION ALL
+            SELECT
+                YEAR(DATE_ADD(CURDATE(), INTERVAL -1 MONTH)),
+                MONTH(DATE_ADD(CURDATE(), INTERVAL -1 MONTH))
+            UNION ALL
+            SELECT
+                YEAR(CURDATE()) AS year,
+                MONTH(CURDATE()) AS month
+        ) m
+        LEFT JOIN emissions e
+            ON m.year = e.year AND m.month = e.month AND e.username = ?
+        ORDER BY m.month DESC; -- 과거부터 정렬`;
 
     connection.query(sql, [username], (err, results) => {
         if (err) {
@@ -94,6 +118,36 @@ router.get("/chart", (req, res) => {
         } else {
             results.reverse(); // 최신 데이터를 과거 순서로 정렬
             res.json(results); // 데이터를 JSON으로 클라이언트에 응답
+        }
+    });
+});
+
+router.get("/chart_pie", (req, res) => {
+    const username = req.session.username;
+
+    if (!username) {
+        return res.status(401).send("사용자가 로그인되어 있지 않습니다.");
+    }
+
+    const sql = `
+        SELECT 
+            electricity_co2,
+            gas_co2,
+            water_co2,
+            transport_co2,
+            waste_co2
+        FROM emissions
+        WHERE username = ? AND year = YEAR(CURDATE()) AND month = MONTH(CURDATE());
+    `;
+
+    connection.query(sql, [username], (err, results) => {
+        if (err) {
+            console.error("데이터 조회 오류:", err);
+            res.status(500).send("데이터 조회 중 오류가 발생했습니다.");
+        } else if (results.length === 0) {
+            res.status(404).send("현재 월 데이터가 없습니다.");
+        } else {
+            res.json(results[0]); // 첫 번째 결과만 반환
         }
     });
 });
