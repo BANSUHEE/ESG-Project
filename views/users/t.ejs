@@ -23,7 +23,6 @@
         margin-bottom: 15px;
     }
 </style>
-
 <div class="box">
     <div class="form-container">
         <!-- 탭 네비게이션 -->
@@ -46,7 +45,6 @@
                     개인 회원
                 </button>
             </li>
-
             <li class="nav-item" role="presentation">
                 <button
                     class="nav-link"
@@ -76,8 +74,14 @@
                     <input
                         type="text"
                         class="form-control"
+                        id="name"
+                        placeholder="이름"
+                        required
+                    />
+                    <input
+                        type="text"
+                        class="form-control"
                         id="username"
-                        name="username"
                         placeholder="아이디"
                         required
                     />
@@ -85,12 +89,25 @@
                         type="password"
                         class="form-control"
                         id="password"
-                        name="password"
                         placeholder="비밀번호"
                         required
                     />
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="id_number"
+                        placeholder="주민등록번호"
+                        required
+                    />
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="call_number"
+                        placeholder="전화번호"
+                        required
+                    />
                     <button type="submit" class="btn btn-secondary w-100">
-                        개인 로그인
+                        회원가입
                     </button>
                 </form>
             </div>
@@ -102,29 +119,47 @@
                 role="tabpanel"
                 aria-labelledby="company-tab"
             >
-                <input
+                <form id="companyForm">
+                    <input
                         type="text"
                         class="form-control"
-                        id="username"
-                        name="username"
+                        id="co_name"
+                        placeholder="기업 이름"
+                        required
+                    />
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="co_username"
                         placeholder="아이디"
                         required
                     />
                     <input
                         type="password"
                         class="form-control"
-                        id="password"
-                        name="password"
+                        id="co_password"
                         placeholder="비밀번호"
                         required
                     />
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="business_type"
+                        placeholder="업종"
+                        required
+                    />
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="registration_number"
+                        placeholder="사업자등록번호"
+                        required
+                    />
                     <button type="submit" class="btn btn-secondary w-100">
-                        기업 로그인
+                        회원가입
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script src="/javascripts/login.js" defer></script>
