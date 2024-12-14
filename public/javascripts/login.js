@@ -1,14 +1,14 @@
 $(document).ready(function () {
-    const loginForm = $("#loginForm");
+    const loginForm = $("#personalForm");
 
     if (loginForm.length) {
-        loginForm.on("submit", function (e) {
+        $("#personalForm, #companyForm").on("submit", function (e) {
             e.preventDefault(); // 폼의 기본 제출 동작을 방지
 
             // 사용자 입력 정보
-            const username = $("#username").val();
-            const password = $("#password").val();
-
+            const username = $(this).find("#username").val();
+            const password = $(this).find("#password").val();
+            console.log(username, password);
             // 로그인 요청을 서버로 전송
             $.ajax({
                 url: "/users/login",

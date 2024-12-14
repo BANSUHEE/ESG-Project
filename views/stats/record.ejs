@@ -1,7 +1,137 @@
+<style>
+    .month-selector {
+        background-color: #f8fff8;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,150,0,0.1);
+    }
+    
+    .form-check {
+        text-align: center;
+        margin: 5px;
+    }
+    
+    .month-btn {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #8bc34a;
+        background-color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .month-btn input[type="checkbox"] {
+        display: none;
+    }
+    
+    .month-btn label {
+        color: #689f38;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        margin: 0;
+        padding: 8px 15px;
+    }
+    
+    .month-btn:hover {
+        background-color: #f1f8e9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(139,195,74,0.2);
+    }
+    
+    /* 체크된 상태 스타일 */
+    .month-btn.checked {
+        background-color: #8bc34a;
+    }
+    
+    .month-btn.checked label {
+        color: white;
+    }
+    </style>
+    
 <h2>최근 6개월 CO₂ 배출량</h2>
+<div class="month-selector container mt-4 mb-4">
+    <div class="row g-3">
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="month1">
+                <label class="form-check-label" for="month1">1월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="2" id="month2">
+                <label class="form-check-label" for="month2">2월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="3" id="month3">
+                <label class="form-check-label" for="month3">3월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="4" id="month4">
+                <label class="form-check-label" for="month4">4월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="5" id="month5">
+                <label class="form-check-label" for="month5">5월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="6" id="month6">
+                <label class="form-check-label" for="month6">6월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="7" id="month7">
+                <label class="form-check-label" for="month7">7월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="8" id="month8">
+                <label class="form-check-label" for="month8">8월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="9" id="month9">
+                <label class="form-check-label" for="month9">9월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="10" id="month10">
+                <label class="form-check-label" for="month10">10월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="11" id="month11">
+                <label class="form-check-label" for="month11">11월</label>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="12" id="month12">
+                <label class="form-check-label" for="month12">12월</label>
+            </div>
+        </div>
+    </div>
+</div>
 <canvas id="co2Chart_bar"></canvas>
-<h2>당월 CO₂ 배출 비율</h2>
-<canvas id="co2Chart_pie"></canvas>
+
+<!-- <h2>당월 CO₂ 배출 비율</h2>
+<canvas id="co2Chart_pie"></canvas> -->
 
 <script src="/javascripts/record_chart_bar.js" defer></script>
-<script src="/javascripts/record_chart_pie.js" defer></script>
+<script src="/javascripts.js" defer></script>
