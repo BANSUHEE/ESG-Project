@@ -13,9 +13,9 @@ router.get("/login", function (req, res, next) {
 // POST 요청 시 로그인 처리
 router.post("/login", function (req, res, next) {
     const { username, password } = req.body;
-
     const query = "SELECT * FROM companies WHERE username = ? AND password = ?";
     connection.query(query, [username, password], (error, results) => {
+        console.log(results);
         if (error) {
             console.error("MySQL 쿼리 오류:", error);
             return res.status(500).json({
