@@ -1,83 +1,90 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>환경 데이터 API</title>
-</head>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        line-height: 1.6;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-        font-size: 12px;
-        text-align: center;
-    }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    tr:hover {
-        background-color: #f5f5f5;
-    }
-</style>
-<body>
-    <h1>환경 빅데이터 API 결과</h1>
-    <input 
-    type="text" 
-    id="searchInput" 
-    placeholder="법인명을 검색해주세요"
-    style="width: 300px; padding: 8px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px;"
->
-    <div id="apiResult"></div>
+    <head>
+        <meta charset="UTF-8" />
+        <title>환경 데이터 API</title>
+    </head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+    <body>
+        <h1>기업 CO2 배출현황 검색</h1>
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="법인명을 검색해주세요"
+            style="
+                width: 300px;
+                padding: 8px;
+                font-size: 16px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            "
+        />
+        <div id="apiResult"></div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const resultDiv = document.getElementById('apiResult');
-            const loadingDiv = document.createElement('div');
-            loadingDiv.textContent = '데이터 로딩 중...';
-            resultDiv.appendChild(loadingDiv);
-            
-            try {
-                const response = await fetch('/api/call', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        apiKey: '0E0568B6C2D44CBB8F0671DB6B05BA0F',
-                        start: 1,
-                        display: 100,
-                        sort: 'a',
-                        params: JSON.stringify({}) 
-                    })
-                });
-    
-                const result = await response.json();
-                result.data.map(item => {
-                    item.trgt_year = parseInt(item.trgt_year);
-                    return item;
-                });
-                result.data.sort((a, b) => a.trgt_year - b.trgt_year);   
-                resultDiv.removeChild(loadingDiv);
-    
-                if (result.data && result.data.length > 0) {
-                    // 테이블 생성 함수
-                    function createTable(data) {
-                        const table = document.createElement('table');
-                        table.innerHTML = `
+        <script>
+            document.addEventListener("DOMContentLoaded", async () => {
+                const resultDiv = document.getElementById("apiResult");
+                const loadingDiv = document.createElement("div");
+                loadingDiv.textContent = "데이터 로딩 중...";
+                resultDiv.appendChild(loadingDiv);
+
+                try {
+                    const response = await fetch("/api/call", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: new URLSearchParams({
+                            apiKey: "0E0568B6C2D44CBB8F0671DB6B05BA0F",
+                            start: 1,
+                            display: 100,
+                            sort: "a",
+                            params: JSON.stringify({}),
+                        }),
+                    });
+
+                    const result = await response.json();
+                    result.data.map((item) => {
+                        item.trgt_year = parseInt(item.trgt_year);
+                        return item;
+                    });
+                    result.data.sort((a, b) => a.trgt_year - b.trgt_year);
+                    resultDiv.removeChild(loadingDiv);
+
+                    if (result.data && result.data.length > 0) {
+                        // 테이블 생성 함수
+                        function createTable(data) {
+                            const table = document.createElement("table");
+                            table.innerHTML = `
                             <thead>
                                 <tr>
                                     <th>법인명</th>
@@ -90,75 +97,98 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${data.map(item => `
+                                ${data
+                                    .map(
+                                        (item) => `
                                     <tr>
-                                        <td>${item.corp_nm || '정보 없음'}</td>
-                                        <td>${item.adres || '정보 없음'}</td>
-                                        <td>${item.eng_cnsm || '정보 없음'}</td> 
-                                        <td>${item.eng_unit || '정보 없음'}</td>
-                                        <td>${item.trgt_year || '정보 없음'}</td>
-                                        <td>${item.ghg_ems || '정보 없음'}</td>
-                                        <td>${item.ghg_unit || '정보 없음'}</td>
+                                        <td>${item.corp_nm || "정보 없음"}</td>
+                                        <td>${item.adres || "정보 없음"}</td>
+                                        <td>${
+                                            item.eng_cnsm || "정보 없음"
+                                        }</td> 
+                                        <td>${item.eng_unit || "정보 없음"}</td>
+                                        <td>${
+                                            item.trgt_year || "정보 없음"
+                                        }</td>
+                                        <td>${item.ghg_ems || "정보 없음"}</td>
+                                        <td>${item.ghg_unit || "정보 없음"}</td>
                                     </tr>
-                                `).join('')}
+                                `
+                                    )
+                                    .join("")}
                             </tbody>
                         `;
-                        return table;
+                            return table;
+                        }
+
+                        // 초기 테이블 생성
+                        const initialTable = createTable(result.data);
+                        resultDiv.appendChild(initialTable);
+
+                        // 검색 기능 구현
+                        const searchInput =
+                            document.getElementById("searchInput");
+                        searchInput.addEventListener("input", function (e) {
+                            const searchTerm = e.target.value.toLowerCase();
+                            const filteredData = result.data.filter(
+                                (item) =>
+                                    (item.corp_nm &&
+                                        item.corp_nm
+                                            .toLowerCase()
+                                            .includes(searchTerm)) ||
+                                    (item.adres &&
+                                        item.adres
+                                            .toLowerCase()
+                                            .includes(searchTerm)) ||
+                                    (item.trgt_year &&
+                                        item.trgt_year
+                                            .toString()
+                                            .includes(searchTerm)) ||
+                                    (item.eng_cnsm &&
+                                        item.eng_cnsm
+                                            .toString()
+                                            .includes(searchTerm)) ||
+                                    (item.ghg_ems &&
+                                        item.ghg_ems
+                                            .toString()
+                                            .includes(searchTerm))
+                            );
+
+                            // 기존 테이블 제거
+                            while (resultDiv.firstChild) {
+                                resultDiv.removeChild(resultDiv.firstChild);
+                            }
+
+                            // 필터링된 데이터로 새 테이블 생성
+                            if (filteredData.length > 0) {
+                                const newTable = createTable(filteredData);
+                                resultDiv.appendChild(newTable);
+                            } else {
+                                resultDiv.textContent = "검색 결과가 없습니다.";
+                            }
+                        });
+
+                        console.log(`총 데이터 수: ${result.total}`);
+                        console.log(`결과 코드: ${result.resultCd}`);
+                        console.log(`결과 메시지: ${result.resultMsg}`);
+                    } else {
+                        resultDiv.textContent = "조회된 데이터가 없습니다.";
                     }
-    
-                    // 초기 테이블 생성
-                    const initialTable = createTable(result.data);
-                    resultDiv.appendChild(initialTable);
-    
-                    // 검색 기능 구현
-                    const searchInput = document.getElementById('searchInput');
-                    searchInput.addEventListener('input', function(e) {
-                        const searchTerm = e.target.value.toLowerCase();
-                        const filteredData = result.data.filter(item => 
-                            (item.corp_nm && item.corp_nm.toLowerCase().includes(searchTerm)) ||
-                            (item.adres && item.adres.toLowerCase().includes(searchTerm)) ||
-                            (item.trgt_year && item.trgt_year.toString().includes(searchTerm)) ||
-                            (item.eng_cnsm && item.eng_cnsm.toString().includes(searchTerm)) ||
-                            (item.ghg_ems && item.ghg_ems.toString().includes(searchTerm))
-                        );
-    
-                        // 기존 테이블 제거
-                        while (resultDiv.firstChild) {
-                            resultDiv.removeChild(resultDiv.firstChild);
-                        }
-    
-                        // 필터링된 데이터로 새 테이블 생성
-                        if (filteredData.length > 0) {
-                            const newTable = createTable(filteredData);
-                            resultDiv.appendChild(newTable);
-                        } else {
-                            resultDiv.textContent = '검색 결과가 없습니다.';
-                        }
-                    });
-    
-                    console.log(`총 데이터 수: ${result.total}`);
-                    console.log(`결과 코드: ${result.resultCd}`);
-                    console.log(`결과 메시지: ${result.resultMsg}`);
-    
-                } else {
-                    resultDiv.textContent = '조회된 데이터가 없습니다.';
+
+                    console.log("API 결과:", result);
+                } catch (error) {
+                    if (loadingDiv.parentNode) {
+                        resultDiv.removeChild(loadingDiv);
+                    }
+
+                    const errorDiv = document.createElement("div");
+                    errorDiv.style.color = "red";
+                    errorDiv.textContent = `API 호출 중 오류가 발생했습니다: ${error.message}`;
+                    resultDiv.appendChild(errorDiv);
+
+                    console.error("API 호출 오류:", error);
                 }
-    
-                console.log('API 결과:', result);
-    
-            } catch (error) {
-                if (loadingDiv.parentNode) {
-                    resultDiv.removeChild(loadingDiv);
-                }
-    
-                const errorDiv = document.createElement('div');
-                errorDiv.style.color = 'red';
-                errorDiv.textContent = `API 호출 중 오류가 발생했습니다: ${error.message}`;
-                resultDiv.appendChild(errorDiv);
-    
-                console.error('API 호출 오류:', error);
-            }
-        });
-    </script>
-</body>
-</html> 
+            });
+        </script>
+    </body>
+</html>
