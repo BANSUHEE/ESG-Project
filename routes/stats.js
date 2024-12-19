@@ -160,6 +160,34 @@ router.get("/chart_pie", (req, res) => {
     );
 });
 
+router.get("/yearly-emissions", (req, res) => {
+    const username = req.session.username; // 세션에서 username 가져오기
+    const selectedYear = parseInt(req.query.selectedYear); // 선택된 연도 가져오기
+
+    if (!username) {
+        return res.status(401).send("사용자가 로그인되어 있지 않습니다.");
+    }
+    if (!selectedYear || selectedYear < 1900 || selectedYear > 2100) {
+        return res.status(400).send("유효한 연도가 선택되지 않았습니다.");
+    }
+
+    const sql = `
+        SELECT month, COALESCE(total_co2, 0) AS total_co2
+        FROM emissions
+        WHERE username = ? AND year = ?
+        ORDER BY month ASC;
+    `;
+
+    connection.query(sql, [username, selectedYear], (err, results) => {
+        if (err) {
+            console.error("연도별 데이터 조회 오류:", err);
+            return res.status(500).send("데이터 조회 중 오류가 발생했습니다.");
+        }
+
+        res.json(results); // 연도의 모든 월 데이터를 JSON 형식으로 반환
+    });
+});
+
 router.post("/call", async (req, res) => {
     try {
         console.log("요청 본문:", req.body); // 요청 본문 로깅

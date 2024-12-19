@@ -1,61 +1,41 @@
 <link rel="stylesheet" href="/stylesheets/recordStyle.css" />
-<div class="container mt-4">
-    <h2 class="title">최근 6개월 CO₂ 배출량</h2>
-
-    <div class="year_month">
-        <!-- 연도 선택 드롭다운 -->
-        <select id="yearSelect">
-            <% for (let year = 2020; year <= 2030; year++) { %>
-            <option value="<%= year %>"><%= year %>년</option>
-            <% } %>
-        </select>
-
-        <!-- 월 선택 체크박스 -->
-        <div class="row text-center month-selector" id="monthGrid">
-            <% for (let month = 1; month <= 12; month++) { %>
-            <div class="col-2">
-                <div class="form-check">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="month<%= month %>"
-                        value="<%= month %>"
-                    />
-                    <label class="form-check-label" for="month<%= month %>">
-                        <%= month %>월
-                    </label>
-                </div>
-            </div>
-            <% } %>
-        </div>
-    </div>
+<h2 class="title">
+    <select id="yearSelect">
+        <% for (let year = 2020; year <= 2030; year++) { %>
+        <option value="<%= year %>"><%= year %>년</option>
+        <% } %>
+    </select>
+    온실가스 기록장
+</h2>
+<div class="container2">
+    <!-- 연도 선택 드롭다운 -->
 
     <!-- 차트 -->
     <div class="top1">
         <div class="chart-container">
             <canvas id="co2Chart_pie"></canvas>
         </div>
-        <div class="row row-cols-4 g-3 monthCard-Container">
-            <!-- 12개의 카드 반복 -->
-            <% for (let month = 1; month <= 12; month++) { %>
-            <div class="col">
+
+        <div class="calendar">
+            <!-- 월 선택 카드 -->
+            <div class="monthCard-Container">
+                <% for (let month = 1; month <= 12; month++) { %>
                 <div
                     class="card month-card text-center"
                     data-month="<%= month %>"
-                    onclick="toggleCard(this)"
+                    onclick="selectMonthCard(this)"
                 >
                     <div class="card-body">
                         <h5 class="card-title"><%= month %>월</h5>
                     </div>
                 </div>
+                <h5 class="card-total-co2" id="co2-month-<%= month %>">kg</h5>
+                <% } %>
             </div>
-            <% } %>
         </div>
     </div>
+
     <canvas id="co2Chart_bar" class="mt-3"></canvas>
 </div>
 
 <script type="module" src="/javascripts/record.js" defer></script>
-
-<!-- <script src="/javascripts/record_chart_bar.js" defer></script>
-<script src="/javascripts/record_chart_pie.js" defer></script> -->

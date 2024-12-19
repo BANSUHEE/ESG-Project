@@ -27,6 +27,9 @@
                 <li class="nav-item"></li>
                     <a class="nav-link" href="/stats/api" id="record">법인검색</a>
                 </li>
+                <li class="nav-item"></li>
+                    <a class="nav-link" href="/stats/api" id="record">미션</a>
+                </li>
             </ul>
             
             <ul class="navbar-nav">
@@ -35,6 +38,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="join" href="/users/join">회원가입</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="mypage" href="/users/join">마이페이지</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="logout" href="#" style="display: none;">로그아웃</a>
@@ -85,11 +91,15 @@
         $("#logout").show(); // 로그아웃 링크 표시
         $("#calculator, #record").show(); // 계산기, 기록장 링크 표시
         $("#welcome").text(username + "님 환영합니다!"); // 환영 메시지 표시
+        $("#mypage").show();
+        $("#mission").show(); 
     } else {
         // 로그아웃 상태
         $("#login, #join").show(); // 로그인/회원가입 링크 표시
         $("#logout, #welcome").hide(); // 로그아웃 링크 숨기기
         $("#calculator, #record").hide(); // 계산기, 기록장 링크 숨기기
+        $("#mypage").hide();
+        $("#mission").hide(); 
     }
 
     // 로그아웃 버튼 클릭 이벤트

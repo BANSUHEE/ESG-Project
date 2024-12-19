@@ -37,7 +37,6 @@ function updateChartPie(data) {
     if (co2PieChart) {
         co2PieChart.destroy();
     }
-
     const ctx = document.getElementById("co2Chart_pie").getContext("2d");
     co2PieChart = new Chart(ctx, {
         type: "pie",
@@ -48,29 +47,45 @@ function updateChartPie(data) {
                     label: "CO₂ 배출 비율",
                     data: co2Values,
                     backgroundColor: [
-                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(115, 99, 255, 0.2)",
                         "rgba(54, 162, 235, 0.2)",
                         "rgba(255, 206, 86, 0.2)",
                         "rgba(75, 192, 192, 0.2)",
                         "rgba(153, 102, 255, 0.2)",
                     ],
                     borderColor: [
-                        "rgba(255, 99, 132, 1)",
-                        "rgba(54, 162, 235, 1)",
-                        "rgba(255, 206, 86, 1)",
-                        "rgba(75, 192, 192, 1)",
-                        "rgba(153, 102, 255, 1)",
+                        "rgb(212, 255, 226)",
+                        "rgb(167, 220, 255)",
+                        "rgb(255, 236, 189)",
+                        "rgb(190, 255, 255)",
+                        "rgb(221, 204, 255)",
                     ],
                     borderWidth: 1,
                 },
             ],
         },
-
         options: {
             responsive: true,
+            layout: {
+                padding: {
+                    top: 50, // 상단 레이블과 차트 간 간격
+                    bottom: 20, // 차트와 하단 요소 간 간격 (옵션)
+                },
+            },
             plugins: {
+                legend: {
+                    display: true,
+                    position: "top",
+                    labels: {
+                        padding: 10, // 레이블 간 내부 여백
+                        boxWidth: 20,
+                        font: {
+                            size: 14,
+                        },
+                    },
+                },
                 datalabels: {
-                    color: "gray", // 글자 색상
+                    color: "gray",
                     formatter: (value, ctx) => {
                         const total = ctx.dataset.data.reduce(
                             (acc, cur) => acc + cur,
@@ -83,15 +98,15 @@ function updateChartPie(data) {
                     },
                     anchor: (context) => {
                         const percentage = calculatePercentage(context);
-                        return percentage > 15 ? "center" : "end"; // 큰 섹션은 내부에 표시
+                        return percentage > 15 ? "center" : "end";
                     },
                     align: (context) => {
                         const percentage = calculatePercentage(context);
-                        return percentage > 15 ? "center" : "start"; // 작은 섹션은 바깥에 표시
+                        return percentage > 15 ? "center" : "start";
                     },
                     offset: (context) => {
                         const percentage = calculatePercentage(context);
-                        return percentage < 10 ? 0 : 20; // 작은 섹션은 바깥으로 이동
+                        return percentage < 10 ? 0 : 20;
                     },
                     font: {
                         size: 20,
@@ -102,6 +117,7 @@ function updateChartPie(data) {
         },
         plugins: [ChartDataLabels],
     });
+
     // 비율 계산 함수
     function calculatePercentage(context) {
         const value = context.dataset.data[context.dataIndex];
