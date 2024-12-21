@@ -2,11 +2,22 @@ var express = require("express");
 var router = express.Router();
 const connection = require("./database");
 
-router.get("/calculator", function (req, res, next) {
-    //랜더링한다.(출력) => view파일의 ejs 파일을(기본적으로 html+서버에서 보낸 변수 처리 가능)
+// router.get("/calculator", function (req, res, next) {
+//     //랜더링한다.(출력) => view파일의 ejs 파일을(기본적으로 html+서버에서 보낸 변수 처리 가능)
+//     res.render("index", {
+//         title: "calculator",
+//         pageName: "stats/calculator.ejs",
+//     });
+// });
+router.get("/calculator", (req, res) => {
+    const selectedYear = req.query.year || new Date().getFullYear();
+    const selectedMonth = req.query.month || new Date().getMonth() + 1;
+
     res.render("index", {
         title: "calculator",
-        pageName: "stats/calculator.ejs",
+        pageName: "stats/calculator",
+        selectedYear: selectedYear,
+        selectedMonth: selectedMonth,
     });
 });
 
@@ -57,9 +68,11 @@ router.post("/calculator", (req, res) => {
 });
 
 router.get("/record", (req, res) => {
+    const selectedYear = req.query.year || new Date().getFullYear();
     res.render("index", {
         title: "record",
         pageName: "stats/record.ejs",
+        selectedYear: selectedYear,
     });
 });
 
@@ -185,6 +198,36 @@ router.get("/yearly-emissions", (req, res) => {
         }
 
         res.json(results); // 연도의 모든 월 데이터를 JSON 형식으로 반환
+    });
+});
+
+router.get("/total-co2", (req, res) => {
+    const username = req.session.username; // 세션에서 username 가져오기
+    const selectedYear = parseInt(req.query.selectedYear); // 선택된 연도 가져오기
+
+    if (!username) {
+        return res.status(401).send("사용자가 로그인되어 있지 않습니다.");
+    }
+    if (!selectedYear || selectedYear < 1900 || selectedYear > 2100) {
+        return res.status(400).send("유효한 연도가 선택되지 않았습니다.");
+    }
+
+    const sql = `
+        SELECT COALESCE(SUM(total_co2), 0) AS total_co2
+        FROM emissions
+        WHERE username = ? AND year = ?;
+    `;
+
+    connection.query(sql, [username, selectedYear], (err, results) => {
+        if (err) {
+            console.error("연도별 총 CO2 데이터 조회 오류:", err);
+            return res.status(500).send("데이터 조회 중 오류가 발생했습니다.");
+        }
+
+        res.json(results[0]); // 총 CO2 데이터 반환
+        res.render("record", {
+            username: username,
+        });
     });
 });
 

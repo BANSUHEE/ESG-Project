@@ -1,6 +1,11 @@
+.gothic-a1-regular {
+    font-family: "Gothic A1", serif;
+    font-weight: 400;
+    font-style: normal;
+}
 body {
     padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 14px "Gothic A1", Helvetica, Arial, sans-serif;
 }
 
 form#joinForm {
@@ -48,7 +53,6 @@ form#loginForm button {
 }
 .calculator .section {
     width: 230px;
-    background-color: #f8f9fa; /* 밝은 배경색 */
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */
@@ -84,6 +88,6 @@ form#loginForm button {
 
 /* 전체 페이지 배경색 및 기본 폰트 설정 */
 .calculator body {
-    background-color: #e9ecef;
+    /* background-color: #e9ecef; */
     font-family: Arial, sans-serif;
 }

@@ -1,21 +1,73 @@
-<h2>CO2 Calculator</h2>
-<!-- 년도 선택 -->
-<div>
-    <label for="yearSelect">년도:</label>
+<style>
+    .title-wrapper{
+        overflow: hidden;
+        text-align: center;
+        }
+    .title {
+        margin-bottom: 20px;
+        color: #3b7c4c;
+        font-weight: bold;
+    }
+    select {
+        margin-bottom: 20px;
+        border: 1px solid #3b7c4c;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin-right: 5px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #49794a;
+        text-align: center;
+    }
+
+   
+    .total-section {
+        text-align: center; /* 전체 중앙 정렬 */
+        width: 100%;
+    }
+
+    .wrapper {
+        display: inline-flex; /* h3 태그를 가로로 정렬 */
+        justify-content: center; /* 가로 중앙 정렬 */
+        align-items: center; /* 세로 정렬 */
+        gap: 10px; /* h3 태그 간 간격 */
+        margin-bottom: 20px; /* 버튼과 간격 */
+    }
+
+    .total-section h3 {
+        font-size: 30px;
+        color: #3b7c4c;
+        margin: 0;
+    }
+
+    .button {
+        display: block; /* 버튼을 줄바꿈 */
+        width: 220px;
+        height: 50px;
+        margin: 0 auto; /* 버튼을 가로 중앙 정렬 */
+    }
+</style>
+<div class="title-wrapper">
+
+    <h2 class="title">온실가스 계산기</h2>
+    <!-- 년도 선택 -->
     <select id="yearSelect">
         <% for (let year = 2020; year <= 2030; year++) { %>
-        <option value="<%= year %>"><%= year %>년</option>
-        <% } %>
-    </select>
+            <option value="<%= year %>" <%= year == selectedYear ? "selected" : "" %>>
+                <%= year %>년
+            </option>
+            <% } %>
+        </select>
+        <select id="monthSelect">
+            <% for (let month = 1; month <= 12; month++) { %>
+            <option value="<%= month %>" <%= month == selectedMonth ? "selected" : "" %>>
+                <%= month %>월
+            </option>
+            <% } %>
+        </select>
+    </div>
 
-    <!-- 월 선택 -->
-    <label for="monthSelect"></label>
-    <select id="monthSelect">
-        <% for (let month = 1; month <= 12; month++) { %>
-        <option value="<%= month %>"><%= month %>월</option>
-        <% } %>
-    </select>
-</div>
+
 
 <br />
 
@@ -133,15 +185,16 @@
     </div>
 
     <!-- CO₂ 총량 카드 -->
-    <h3>총 CO₂ 양</h3>
-    <h3 id="totalCo2">0 kg</h3>
-
-    <!-- CO₂ 양 입력 -->
-    <!-- <label for="co2Input">CO₂ 양 입력 (kg):</label>
-    <input type="number" id="co2Input" placeholder="0" /> -->
-
-    <!-- 저장 버튼 -->
-    <button class="btn btn-primary button" id="saveButton">저장하기</button>
+    <div class="total-section">
+        <!-- h3 태그 가로 정렬 -->
+        <div class="wrapper">
+            <h3>총 배출량</h3>
+            <h3 id="totalCo2" style="font-weight: bolder;">0</h3>
+            <h3>kg</h3>
+        </div>
+        <!-- 버튼은 줄바꿈 후 중앙 정렬 -->
+        <button class="btn btn-success button" id="saveButton">저장하기</button>
+    </div>
 </div>
 
 <script src="/javascripts/calculator.js" defer></script>

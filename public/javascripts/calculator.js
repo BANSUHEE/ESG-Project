@@ -4,8 +4,8 @@ const currentYear = currentDate.getFullYear();
 const currentMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 +1
 
 // 년도와 월 선택 요소의 기본값 설정
-$("#yearSelect").val(currentYear);
-$("#monthSelect").val(currentMonth);
+// $("#yearSelect").val(currentYear);
+// $("#monthSelect").val(currentMonth);
 
 // CO₂ 배출량을 계산하여 총량 업데이트 함수 정의
 function updateTotalCO2() {
@@ -17,7 +17,7 @@ function updateTotalCO2() {
 
     const totalCO2 =
         electricityCO2 + gasCO2 + waterCO2 + transportCO2 + wasteCO2;
-    $("#totalCo2").text(totalCO2.toFixed(2) + " kg");
+    $("#totalCo2").text(totalCO2.toFixed(2));
 }
 
 // 전기 사용량 CO₂ 계산
@@ -83,18 +83,7 @@ $("#saveButton").on("click", function () {
     const wasteCO2 = parseFloat($("#waste-co2").text()) || 0;
     const totalCO2 = parseFloat($("#totalCo2").text()) || 0;
 
-    alert(year + "년" + month + "월");
-    // console.log({
-    //     username: username,
-    //     year: year,
-    //     month: month,
-    //     electricity_co2: electricityCO2,
-    //     gas_co2: gasCO2,
-    //     water_co2: waterCO2,
-    //     transport_co2: transportCO2,
-    //     waste_co2: wasteCO2,
-    //     total_co2: totalCO2,
-    // });
+    // alert(year + "년" + month + "월");
 
     // 년, 월 선택 여부와 CO2 총량 입력 여부 확인
     if (!year || !month) {
@@ -125,6 +114,7 @@ $("#saveButton").on("click", function () {
         }),
         success: function (response) {
             alert("데이터가 성공적으로 저장되었습니다.");
+            window.location.href = `/stats/record?year=${year}`;
         },
         error: function (xhr, status, error) {
             alert("데이터 저장 중 오류가 발생했습니다.");

@@ -100,4 +100,44 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCardsByYear();
 });
 
+// 선택 년의 총 탄소배출량
+function updateTotalCo2Message() {
+    const selectedYear = document.getElementById("yearSelect")?.value;
+
+    fetch(`/stats/total-co2?selectedYear=${selectedYear}`)
+        .then((response) => response.json())
+        .then((data) => {
+            const username = "<%= username %>"; // 서버에서 세션 값 가져오기
+            const totalCo2 = data.total_co2 || 0;
+
+            // 메시지 컨테이너 가져오기
+            const messageContainer = document.querySelector(
+                ".co2-message-container"
+            );
+
+            // 기존 메시지 초기화
+            messageContainer.textContent = "";
+
+            // 새로운 메시지 생성
+            const message = `${username}님의 ${selectedYear}년 탄소 배출량은 ${totalCo2}kg 입니다.`;
+            const messageElement = document.createElement("div");
+            messageElement.textContent = message;
+            messageElement.classList.add("total-co2-message");
+
+            // 컨테이너에 메시지 추가
+            // messageContainer.appendChild(messageElement);
+        })
+        .catch((error) => {
+            console.error("총 CO2 메시지 업데이트 중 오류 발생:", error);
+        });
+}
+
+// 연도 선택 이벤트에 메시지 업데이트 연결
+document
+    .getElementById("yearSelect")
+    ?.addEventListener("change", updateTotalCo2Message);
+
+// 초기 메시지 업데이트
+document.addEventListener("DOMContentLoaded", updateTotalCo2Message);
+
 window.selectMonthCard = selectMonthCard;
